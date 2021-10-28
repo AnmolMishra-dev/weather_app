@@ -50,6 +50,7 @@ class _WeatherScreenState extends State<WeatherScreen>
     ThemeData appTheme = AppStateContainer.of(context).theme;
 
     return Scaffold(
+      backgroundColor:appTheme.primaryColor ,
         appBar: AppBar(
           backgroundColor: appTheme.primaryColor,
           elevation: 0,
@@ -87,70 +88,69 @@ class _WeatherScreenState extends State<WeatherScreen>
 
         body: Material(
           child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.only(bottom: 10),
-              child: Container(
-                decoration: BoxDecoration(color: appTheme.primaryColor,),
-                child: FadeTransition(
-                  opacity: _fadeAnimation,
-                  child: BlocBuilder<WeatherBloc, WeatherState>(
-                      builder: (_, WeatherState weatherState) {
-                    _fadeController.reset();
-                    _fadeController.forward();
+            child: Container(
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              decoration: BoxDecoration(color: appTheme.primaryColor,),
+              child: FadeTransition(
+                opacity: _fadeAnimation,
+                child: BlocBuilder<WeatherBloc, WeatherState>(
+                    builder: (_, WeatherState weatherState) {
+                  _fadeController.reset();
+                  _fadeController.forward();
 
-                    if (weatherState is WeatherLoaded) {
-                      this._cityName = weatherState.weather.cityName;
-                      return WeatherWidget(
-                        weather: weatherState.weather,
-                      );
-                    } else if (weatherState is WeatherError ||
-                        weatherState is WeatherEmpty) {
-                      String errorText = 'There was an error fetching weather data';
-                      if (weatherState is WeatherError) {
-                        if (weatherState.errorCode == 404) {
-                          errorText =
-                              'We have trouble fetching weather for $_cityName';
-                        }
-                      }
-                      return Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(
-                            Icons.error_outline,
-                            color: Colors.redAccent,
-                            size: 24,
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Text(
-                            errorText,
-                            style: TextStyle(
-                              color: Colors.red,
-                            ),
-                          ),
-                          TextButton(
-                            style: TextButton.styleFrom(
-                              primary: appTheme.accentColor,
-                              elevation: 1,
-                            ),
-                            child: Text("Try Again"),
-                            onPressed: _fetchWeatherWithCity,
-                          )
-                        ],
-                      );
-                    } else if (weatherState is WeatherLoading) {
-                      return Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: appTheme.primaryColor,
-                        ),
-                      );
-                    }
-                    return Container(
-                      child: Text('No city set'),
+                  if (weatherState is WeatherLoaded) {
+                    this._cityName = weatherState.weather.cityName;
+                    return WeatherWidget(
+                      weather: weatherState.weather,
                     );
-                  }),
-                ),
+                  } else if (weatherState is WeatherError ||
+                      weatherState is WeatherEmpty) {
+                    String errorText = 'There was an error fetching weather data';
+                    if (weatherState is WeatherError) {
+                      if (weatherState.errorCode == 404) {
+                        errorText =
+                            'We have trouble fetching weather for $_cityName';
+                      }
+                    }
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Icon(
+                          Icons.error_outline,
+                          color: Colors.redAccent,
+                          size: 24,
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          errorText,
+                          style: TextStyle(
+                            color: Colors.red,
+                          ),
+                        ),
+                        TextButton(
+                          style: TextButton.styleFrom(
+                            primary: appTheme.accentColor,
+                            elevation: 1,
+                          ),
+                          child: Text("Try Again"),
+                          onPressed: _fetchWeatherWithCity,
+                        )
+                      ],
+                    );
+                  } else if (weatherState is WeatherLoading) {
+                    return Center(
+                      child: CircularProgressIndicator(
+                        backgroundColor: appTheme.primaryColor,
+                      ),
+                    );
+                  }
+                  return Container(
+                    child: Text('No city set'),
+                  );
+                }),
               ),
             ),
           ),
