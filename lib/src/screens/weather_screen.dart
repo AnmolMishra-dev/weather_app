@@ -50,7 +50,7 @@ class _WeatherScreenState extends State<WeatherScreen>
     ThemeData appTheme = AppStateContainer.of(context).theme;
 
     return Scaffold(
-      backgroundColor:appTheme.primaryColor ,
+        backgroundColor: appTheme.primaryColor,
         appBar: AppBar(
           backgroundColor: appTheme.primaryColor,
           elevation: 0,
@@ -85,13 +85,14 @@ class _WeatherScreenState extends State<WeatherScreen>
                     ])
           ],
         ),
-
         body: Material(
           child: SingleChildScrollView(
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(color: appTheme.primaryColor,),
+              decoration: BoxDecoration(
+                color: appTheme.primaryColor,
+              ),
               child: FadeTransition(
                 opacity: _fadeAnimation,
                 child: BlocBuilder<WeatherBloc, WeatherState>(
@@ -106,7 +107,8 @@ class _WeatherScreenState extends State<WeatherScreen>
                     );
                   } else if (weatherState is WeatherError ||
                       weatherState is WeatherEmpty) {
-                    String errorText = 'There was an error fetching weather data';
+                    String errorText =
+                        'There was an error fetching weather data';
                     if (weatherState is WeatherError) {
                       if (weatherState.errorCode == 404) {
                         errorText =
